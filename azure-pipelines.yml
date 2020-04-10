@@ -27,10 +27,11 @@ stages:
 
 - stage: 'Build'
   jobs:
-  - job: 'BuildJar'
-    displayName: 'Build Fat Jar'
+  - job: 'BuildPublishJar'
+    displayName: 'Build & Publish Jar'
     steps:
     - task: Maven@3
+      displayName: 'Build Jar File'
       inputs:
         mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
@@ -40,20 +41,14 @@ stages:
         publishJUnitResults: false
         # testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
-
-    - script: 'echo $(Build.ArtifactStagingDirectory)'
-      displayName: 'Play Ground'
-
-  - job: 'Publish_Jar'
-    displayName: 'Publish Fat Jar'
-    dependsOn: 'BuildJar'
-    condition: succeeded()
-    
-    steps:
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish Jar File'
       inputs:
         PathtoPublish: 'target/ado-pipeline-simple-java-app-0.0.1-SNAPSHOT.jar'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+
+    - script: 'echo $(Build.ArtifactStagingDirectory)'
+      displayName: 'Play Ground'
 
 
