@@ -27,7 +27,8 @@ stages:
 
 - stage: 'Build'
   jobs:
-  - job: 'Build_Jar'
+  - job: 'BuildJar'
+    displayName: 'Build Fat Jar'
     steps:
     - task: Maven@3
       inputs:
@@ -43,9 +44,11 @@ stages:
     - script: 'echo $(Build.ArtifactStagingDirectory)'
       displayName: 'Play Ground'
 
-- stage: 'Publish'
-  jobs:
   - job: 'Publish_Jar'
+    displayName: 'Publish Fat Jar'
+    dependsOn: 'BuildJar'
+    condition: succeeded()
+    
     steps:
     - task: PublishBuildArtifacts@1
       inputs:
