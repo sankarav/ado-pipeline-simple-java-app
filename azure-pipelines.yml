@@ -19,4 +19,9 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'deploy'
+    goals: 'package'
+
+- script: 'echo $(Build.ArtifactStagingDirectory)'
+  displayName: 'Play Ground'
+
+
