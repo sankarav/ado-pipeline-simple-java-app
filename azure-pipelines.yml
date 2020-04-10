@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  jdkVersion: '1.11'
+  jarName: 'ado-pipeline-simple-java-app-0.0.1-SNAPSHOT.jar'
+
 stages:
 - stage: 'Pre_Build'
   jobs:
@@ -19,7 +23,7 @@ stages:
         mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
         javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.11'
+        jdkVersionOption: '$(jdkVersion)'
         jdkArchitectureOption: 'x64'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
@@ -44,7 +48,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Jar File'
       inputs:
-        PathtoPublish: 'target/ado-pipeline-simple-java-app-0.0.1-SNAPSHOT.jar'
+        PathtoPublish: 'target/$(jarName)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
