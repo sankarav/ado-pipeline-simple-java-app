@@ -21,7 +21,14 @@ stages:
   jobs:
   - job: 'Validate'
     steps:
+    - task: SonarCloudPrepare@1
+      displayName: 'Prepare analysis on SonarCloud'
+      inputs:
+        SonarCloud: 'SonarCloud connection'
+        organization: 'sankarav-ado-repo'
+        scannerMode: Other
     - task: Maven@3
+      displayName: 'Execute Maven goal'
       inputs:
         mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
@@ -30,8 +37,14 @@ stages:
         jdkArchitectureOption: 'x64'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        goals: 'test'
+        sonarQubeRunAnalysis: true
+        sqMavenPluginVersionChoice: 'latest'
+        goals: 'verify'
         codeCoverageToolOption: JaCoCo
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result'
+      inputs:
+        pollingTimeoutSec: '300'
 
 - stage: 'Build'
   jobs:
