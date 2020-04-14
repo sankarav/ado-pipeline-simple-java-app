@@ -49,11 +49,12 @@ stages:
         publishJUnitResults: true
         # testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
-        codeCoverageToolOption: JaCoCo
+        # codeCoverageToolOption: JaCoCo
     
-    - script: |
-        reportgenerator -reports:$(Build.SourcesDirectory)/**/jacoco.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-      displayName: 'Create code coverage report'
+    # Not sure but reportgenerator is unavailable in MS hosted agent
+    # - script: |
+    #     reportgenerator -reports:$(Build.SourcesDirectory)/**/jacoco.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+    #   displayName: 'Create code coverage report'
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Jar File'
