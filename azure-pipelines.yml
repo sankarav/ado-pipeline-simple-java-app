@@ -46,9 +46,15 @@ stages:
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '$(jdkVersion)'
         jdkArchitectureOption: 'x64'
-        publishJUnitResults: false
+        publishJUnitResults: true
         # testResultsFiles: '**/surefire-reports/TEST-*.xml'
         goals: 'package'
+        codeCoverageToolOption: JaCoCo
+    
+    - script: |
+        reportgenerator -reports:$(Build.SourcesDirectory)/**/jacoco.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+      displayName: 'Create code coverage report'
+
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Jar File'
       inputs:
