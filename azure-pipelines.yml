@@ -46,7 +46,14 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
 
-- stage: 'Build'
+- stage: 'Build' # Runs only for PullRequest to Master Branch
+  condition: |
+    and
+    (
+      succeeded(),
+      eq(variables['Build.Reason'], 'PullRequest'),
+      eq(variables['System.PullRequest.TargetBranch'], 'master')
+    )
   jobs:
   - job: 'BuildPublishJar'
     displayName: 'Build & Publish Jar'
