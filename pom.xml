@@ -15,7 +15,16 @@
     <description>Demo project for Spring Boot</description>
 
     <properties>
-        <java.version>11</java.version>
+<!--    Sonar doesnt work with JDK 14 so use JDK 13 or below-->
+        <java.version>13</java.version>
+<!--    #####################################################-->
+<!--    TODO:    Shift this to environment variables-->
+<!--    Refer: https://sonarcloud.io/documentation/analysis/scan/sonarscanner-for-maven/-->
+        <sonar.projectKey>sankarav_ado-pipeline-simple-java-app</sonar.projectKey>
+        <sonar.organization>sankarav-ado-repo</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.login>494ce1c9115ce525f98e52d0c1aa7979927e6e2e</sonar.login>
+<!--    #####################################################-->
     </properties>
 
     <dependencies>
@@ -43,12 +52,23 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+<!--                #####################################################-->
+<!--                Do not Use this, plugin is automatically detected-->
+<!--                #####################################################-->
+<!--                <plugin>-->
+<!--                    <groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--                    <artifactId>sonar-maven-plugin</artifactId>-->
+<!--                    <version>3.6.1.1688</version>-->
+<!--                </plugin>-->
+<!--                #####################################################-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
