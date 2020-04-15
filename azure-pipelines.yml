@@ -21,8 +21,15 @@ stages:
   jobs:
   - job: 'Validate'
     steps:
-    - task: SonarCloudPrepare@1
+    - task: SonarCloudPrepare@1     # Runs only for PullRequest to Master Branch
       displayName: 'Prepare analysis on SonarCloud'
+      condition: |
+        and
+        (
+          succeeded(),
+          eq(variables['Build.Reason'], 'PullRequest'),
+          eq(variables['System.PullRequest.TargetBranch'], 'master')
+        )
       inputs:
         SonarCloud: 'SonarCloud connection'
         organization: 'sankarav-ado-repo'
@@ -41,7 +48,14 @@ stages:
         sqMavenPluginVersionChoice: 'latest'
         goals: 'verify'
         codeCoverageToolOption: JaCoCo
-    - task: SonarCloudPublish@1
+    - task: SonarCloudPublish@1     # Runs only for PullRequest to Master Branch
+      condition: |
+        and
+        (
+          succeeded(),
+          eq(variables['Build.Reason'], 'PullRequest'),
+          eq(variables['System.PullRequest.TargetBranch'], 'master')
+        )
       displayName: 'Publish Quality Gate Result'
       inputs:
         pollingTimeoutSec: '300'
@@ -49,17 +63,16 @@ stages:
     - script: 'echo $(Build.SourceBranch)'
       displayName: 'Play Ground'
 
-- stage: 'Build' # Runs only for PullRequest to Master Branch
-  condition: |
-    and
-    (
-      succeeded(),
-      eq(variables['Build.Reason'], 'PullRequest'),
-      eq(variables['System.PullRequest.TargetBranch'], 'master')
-    )
+- stage: 'Build' # Runs only for Merge to Master Branch
   jobs:
   - job: 'BuildPublishJar'
     displayName: 'Build & Publish Jar'
+    condition: |
+      and
+      (
+        succeeded(),
+        eq(variables['Build.SourceBranch'], 'master')
+      )
     steps:
     - task: Maven@3
       displayName: 'Build Jar File'
