@@ -65,7 +65,15 @@ stages:
       displayName: 'Publish Quality Gate Result'
       inputs:
         pollingTimeoutSec: '300'
-    
+    - task: WhiteSource Bolt@20                  # Runs only for Merge to Master Branch
+      displayName: 'Run WhiteSource Bolt'
+      condition: |
+        and
+        (
+          succeeded(),
+          eq(variables['Build.SourceBranch'], 'refs/heads/master')
+        )
+
     - script: |
         echo 'Build.SourceBranch = ' $(Build.SourceBranch)
         echo 'Build.Reason = ' $(Build.Reason)
