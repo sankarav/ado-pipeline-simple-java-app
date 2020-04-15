@@ -21,14 +21,17 @@ stages:
   jobs:
   - job: 'Validate'
     steps:
-    - task: SonarCloudPrepare@1     # Runs only for PullRequest to Master Branch
+    - task: SonarCloudPrepare@1     # Runs only for PullRequest to Master Branch and Merge to Master
       displayName: 'Prepare analysis on SonarCloud'
       condition: |
         and
         (
           succeeded(),
-          eq(variables['Build.Reason'], 'PullRequest'),
-          eq(variables['System.PullRequest.TargetBranch'], 'master')
+          or
+          (
+            eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+            eq(variables['System.PullRequest.TargetBranch'], 'master')  
+          )
         )
       inputs:
         SonarCloud: 'SonarCloud connection'
@@ -48,13 +51,16 @@ stages:
         sqMavenPluginVersionChoice: 'latest'
         goals: 'verify'
         codeCoverageToolOption: JaCoCo
-    - task: SonarCloudPublish@1     # Runs only for PullRequest to Master Branch
+    - task: SonarCloudPublish@1     # Runs only for PullRequest to Master Branch and Merge to Master
       condition: |
         and
         (
           succeeded(),
-          eq(variables['Build.Reason'], 'PullRequest'),
-          eq(variables['System.PullRequest.TargetBranch'], 'master')
+          or
+          (
+            eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+            eq(variables['System.PullRequest.TargetBranch'], 'master')  
+          )
         )
       displayName: 'Publish Quality Gate Result'
       inputs:
