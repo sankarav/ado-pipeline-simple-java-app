@@ -60,7 +60,10 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
     
-    - script: 'echo $(Build.SourceBranch)'
+    - script: |
+        echo 'Build.SourceBranch = ' $(Build.SourceBranch)
+        echo 'Build.Reason = ' $(Build.Reason)
+        echo 'System.PullRequest.TargetBranch = ' $(System.PullRequest.TargetBranch)
       displayName: 'Play Ground'
 
 - stage: 'Build' # Runs only for Merge to Master Branch
@@ -99,7 +102,10 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-    - script: 'echo $(Build.SourceBranch)'
+    - script: |
+        echo 'Build.SourceBranch = ' $(Build.SourceBranch)
+        echo 'Build.Reason = ' $(Build.Reason)
+        echo 'System.PullRequest.TargetBranch = ' $(System.PullRequest.TargetBranch)
       displayName: 'Play Ground'
 
 
