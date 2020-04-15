@@ -45,6 +45,9 @@ stages:
       displayName: 'Publish Quality Gate Result'
       inputs:
         pollingTimeoutSec: '300'
+    
+    - script: 'echo $(Build.SourceBranch)'
+      displayName: 'Play Ground'
 
 - stage: 'Build' # Runs only for PullRequest to Master Branch
   condition: |
@@ -83,7 +86,7 @@ stages:
         ArtifactName: 'drop'
         publishLocation: 'Container'
 
-    - script: 'echo $(Build.ArtifactStagingDirectory)'
+    - script: 'echo $(Build.SourceBranch)'
       displayName: 'Play Ground'
 
 
