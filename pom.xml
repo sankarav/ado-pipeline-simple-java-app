@@ -16,7 +16,7 @@
 
     <properties>
 <!--    Sonar doesnt work with JDK 14 so use JDK 13 or below-->
-        <java.version>13</java.version>
+<!--        <java.version>13</java.version>-->
 <!--    #####################################################-->
 <!--    TODO:    Shift this to environment variables-->
 <!--    Refer: https://sonarcloud.io/documentation/analysis/scan/sonarscanner-for-maven/-->
